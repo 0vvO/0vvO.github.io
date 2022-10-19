@@ -4,14 +4,19 @@
   <meta charset="utf-8">
   
   
-  <title>学习记录</title>
+  <title>每日一题 1700 无法吃午餐的学生数量 | 学习记录</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="学习记录">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="学校的自助午餐提供圆形和方形的三明治，分别用数字 0 和 1 表示。所有学生站在一个队列里，每个学生要么喜欢圆形的要么喜欢方形的。餐厅里三明治的数量与学生的数量相同。所有三明治都放在一个栈里，每一轮：  如果队列最前面的学生 喜欢栈顶的三明治，那么会拿走它并离开队列。 否则，这名学生会放弃这个三明治并回到队列的尾部。  这个过程会一直持续到队列里所有学生都不喜欢栈顶的三明治为止。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="每日一题 1700 无法吃午餐的学生数量">
+<meta property="og:url" content="http://example.com/2022/10/19/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-1700-%E6%97%A0%E6%B3%95%E5%90%83%E5%8D%88%E9%A4%90%E7%9A%84%E5%AD%A6%E7%94%9F%E6%95%B0%E9%87%8F/index.html">
 <meta property="og:site_name" content="学习记录">
+<meta property="og:description" content="学校的自助午餐提供圆形和方形的三明治，分别用数字 0 和 1 表示。所有学生站在一个队列里，每个学生要么喜欢圆形的要么喜欢方形的。餐厅里三明治的数量与学生的数量相同。所有三明治都放在一个栈里，每一轮：  如果队列最前面的学生 喜欢栈顶的三明治，那么会拿走它并离开队列。 否则，这名学生会放弃这个三明治并回到队列的尾部。  这个过程会一直持续到队列里所有学生都不喜欢栈顶的三明治为止。">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-19T06:26:31.000Z">
+<meta property="article:modified_time" content="2022-10-19T06:53:01.390Z">
 <meta property="article:author" content="YXY">
+<meta property="article:tag" content="模拟">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="学习记录" type="application/atom+xml">
@@ -69,62 +74,7 @@
 </header>
 
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Hot100-34-在排序数组中查找元素的第一个和最后一个位置" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/10/19/Hot100-34-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/" class="article-date">
-  <time class="dt-published" datetime="2022-10-19T11:23:08.000Z" itemprop="datePublished">2022-10-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Hot100/">Hot100</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/10/19/Hot100-34-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/">Hot100-34-在排序数组中查找元素的第一个和最后一个位置</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>给你一个按照非递减顺序排列的整数数组<code>nums</code>，和一个目标值<code>target</code>。请你找出给定目标值在数组中的开始位置和结束位置。</p>
-<p>如果数组中不存在目标值<code>target</code>，返回<code>[-1, -1]</code>。</p>
-<p>你必须设计并实现时间复杂度为 O(log n) 的算法解决此问题。</p>
-<p>示例1:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [5,7,7,8,8,10], target = 8</span><br><span class="line">输出：[3,4]</span><br></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2022/10/19/Hot100-34-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/10/19/Hot100-34-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/" data-id="cl9fkkgau0000asn60c5udln9" data-title="Hot100-34-在排序数组中查找元素的第一个和最后一个位置" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BA%8C%E5%88%86/" rel="tag">二分</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-每日一题-1700-无法吃午餐的学生数量" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+        <section id="main"><article id="post-每日一题-1700-无法吃午餐的学生数量" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2022/10/19/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-1700-%E6%97%A0%E6%B3%95%E5%90%83%E5%8D%88%E9%A4%90%E7%9A%84%E5%AD%A6%E7%94%9F%E6%95%B0%E9%87%8F/" class="article-date">
   <time class="dt-published" datetime="2022-10-19T06:26:31.000Z" itemprop="datePublished">2022-10-19</time>
@@ -141,8 +91,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/10/19/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-1700-%E6%97%A0%E6%B3%95%E5%90%83%E5%8D%88%E9%A4%90%E7%9A%84%E5%AD%A6%E7%94%9F%E6%95%B0%E9%87%8F/">每日一题 1700 无法吃午餐的学生数量</a>
+    <h1 class="p-name article-title" itemprop="headline name">
+      每日一题 1700 无法吃午餐的学生数量
     </h1>
   
 
@@ -156,11 +106,11 @@
 <li>否则，这名学生会放弃这个三明治并回到队列的尾部。</li>
 </ul>
 <p>这个过程会一直持续到队列里所有学生都不喜欢栈顶的三明治为止。</p>
-        
-          <p class="article-more-link">
-            <a href="/2022/10/19/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-1700-%E6%97%A0%E6%B3%95%E5%90%83%E5%8D%88%E9%A4%90%E7%9A%84%E5%AD%A6%E7%94%9F%E6%95%B0%E9%87%8F/#more">Read More</a>
-          </p>
-        
+<span id="more"></span>
+
+
+<p>给你两个整数数组 <code>students</code> 和 <code>sandwiches</code> ，其中sandwiches[i] 是栈里面第 i​​​​​​ 个三明治的类型（i &#x3D; 0 是栈的顶部）， students[j] 是初始队列里第 j​​​​​​ 名学生对三明治的喜好（j &#x3D; 0 是队列的最开始位置）。请你返回无法吃午餐的学生数量。</p>
+
       
     </div>
     <footer class="article-footer">
@@ -173,11 +123,23 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
+  
+    <a href="/2022/10/19/Hot100-34-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          Hot100-34-在排序数组中查找元素的第一个和最后一个位置
+        
+      </div>
+    </a>
+  
+  
+</nav>
 
   
+</article>
 
 
 </section>
