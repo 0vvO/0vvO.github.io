@@ -28,8 +28,9 @@
 <meta property="og:description" content="题目:一个正整数如果能被a或b整除，那么它是神奇的。 给定三个整数n,a,b，返回第n个神奇的数字。因为答案可能很大，所以返回答案 对$10^9$ + 7取模后的值。 示例1: 12输入：n &#x3D; 4, a &#x3D; 2, b &#x3D; 3输出：6">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-11-22T06:18:01.000Z">
-<meta property="article:modified_time" content="2022-11-22T06:31:55.795Z">
+<meta property="article:modified_time" content="2022-11-22T06:40:36.778Z">
 <meta property="article:author" content="YXY">
+<meta property="article:tag" content="二分">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://example.com/2022/11/22/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-878-%E7%AC%ACN%E4%B8%AA%E7%A5%9E%E5%A5%87%E6%95%B0%E5%AD%97/">
@@ -213,7 +214,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-11-22 14:18:01 / 修改时间：14:31:55" itemprop="dateCreated datePublished" datetime="2022-11-22T14:18:01+08:00">2022-11-22</time>
+              <time title="创建时间：2022-11-22 14:18:01 / 修改时间：14:40:36" itemprop="dateCreated datePublished" datetime="2022-11-22T14:18:01+08:00">2022-11-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -244,7 +245,7 @@
 <span id="more"></span>
 
 
-<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">由于n可能很大,所以直接从 1 到 n*min(a, b) 统计神奇数字的个数会有超时的可能。</span><br><span class="line">为了避免超时，我们可以采用二分的方法统计小于mid的神奇数字有多少个。当然直接循环统计也是会超时的。对于 a 来说， 小于mid的神奇数字最多有mid / a, 同理对于b来说， 最多有 mid/b个， 同时能够整除a和b的神奇数共有 mid/c， c为a，b的最小公倍数。 cnt = mid/a + mid/b -mid/c。</span><br></pre></td></tr></table></figure>
+<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">由于n可能很大,所以直接从 1 到 n*min(a, b) 统计神奇数字的个数会有超时的可能。</span><br><span class="line">为了避免超时，我们可以采用二分的方法统计小于mid的神奇数字有多少个。</span><br><span class="line">对于 a 来说， 小于mid的神奇数字最多有mid / a, </span><br><span class="line">对于 b 来说， 最多有 mid/b个， </span><br><span class="line">同时能够整除a和b的神奇数共有 mid/c， c为a，b的最小公倍数。 </span><br><span class="line">cnt = mid/a + mid/b -mid/c。</span><br></pre></td></tr></table></figure>
 
 <h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">MOD</span> <span class="operator">=</span> (<span class="type">int</span>) <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">nthMagicalNumber</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(a &gt; b) <span class="keyword">return</span> nthMagicalNumber(n, b ,a);</span><br><span class="line">        <span class="keyword">if</span>(b % a == <span class="number">0</span>) <span class="keyword">return</span> (<span class="type">int</span>)((<span class="type">long</span>) a * n % MOD);</span><br><span class="line">        <span class="type">long</span> <span class="variable">r</span> <span class="operator">=</span> (<span class="type">long</span>)a * n;</span><br><span class="line">        <span class="type">long</span> <span class="variable">l</span> <span class="operator">=</span> a;</span><br><span class="line">        <span class="type">long</span> <span class="variable">lcm</span> <span class="operator">=</span> lcm(a, b);</span><br><span class="line">        <span class="keyword">while</span>(l &lt;= r)&#123;</span><br><span class="line">            <span class="type">long</span> <span class="variable">mid</span> <span class="operator">=</span> l + (r - l)/<span class="number">2</span>;</span><br><span class="line">            <span class="type">long</span> <span class="variable">cnt</span> <span class="operator">=</span> mid/a + mid/b - mid/lcm;</span><br><span class="line">            <span class="keyword">if</span>(cnt &gt;= n) r = mid - <span class="number">1</span>;      <span class="comment">// 缩小右界直到cnt刚好小于n</span></span><br><span class="line">            <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">int</span>)(l % MOD);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 最小公倍数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">lcm</span><span class="params">(<span class="type">long</span> a, <span class="type">long</span> b)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (a * b) / gcd(a, b);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 最大公因数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">gcd</span><span class="params">(<span class="type">long</span> a, <span class="type">long</span> b)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> b == <span class="number">0</span> ? a : gcd(b, a % b); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
@@ -254,6 +255,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%8C%E5%88%86/" rel="tag"># 二分</a>
+          </div>
 
         
 
