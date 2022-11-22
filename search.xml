@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>位运算</title>
+      <link href="/2022/11/22/%E4%BD%8D%E8%BF%90%E7%AE%97/"/>
+      <url>/2022/11/22/%E4%BD%8D%E8%BF%90%E7%AE%97/</url>
+      
+        <content type="html"><![CDATA[<p>位运算技巧</p><table><thead><tr><th align="center">运算</th><th align="center">解释</th></tr></thead><tbody><tr><td align="center">(n &gt;&gt; k) &amp; 1</td><td align="center">取出整数n在二进制表示下的第k位</td></tr><tr><td align="center">n &amp; ((1 &lt;&lt; k) - 1)</td><td align="center">取出整数n在二进制表示下的第0~k-1位(后k位)</td></tr><tr><td align="center">n xor (1 &lt;&lt; k)</td><td align="center">把整数n在二进制表示下的第k位取反</td></tr><tr><td align="center">n\</td><td align="center">(1 &lt;&lt; k)</td></tr><tr><td align="center">n&amp;(~(1 &lt;&lt; k))</td><td align="center">把整数n在二进制表示下的第k位赋值0</td></tr><tr><td align="center">n &amp; (-n)</td><td align="center">非负整数n在二进制表示下“最低位的1及其后边所有0构成的数值”</td></tr><tr><td align="center">n &amp; (n - 1)</td><td align="center">将整数n在二进制表示下的最低位1赋值0</td></tr><tr><td align="center">n \</td><td align="center">(n + 1)</td></tr></tbody></table>]]></content>
+      
+      
+      <categories>
+          
+          <category> LeetCode总结 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>每日一题-862-和至少为K的最短子数组</title>
       <link href="/2022/10/26/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-862-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BAK%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/"/>
       <url>/2022/10/26/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-862-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BAK%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/</url>

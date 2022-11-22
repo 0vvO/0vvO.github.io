@@ -20,15 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="学习记录">
-<meta property="og:url" content="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86/index.html">
+  <meta name="description" content="位运算技巧    运算 解释    (n &gt;&gt; k) &amp; 1 取出整数n在二进制表示下的第k位   n &amp; ((1 &lt;&lt; k) - 1) 取出整数n在二进制表示下的第0~k-1位(后k位)   n xor (1 &lt;&lt; k) 把整数n在二进制表示下的第k位取反   n\ (1 &lt;&lt; k)   n&amp;(~(1 &lt;&lt; k)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="位运算">
+<meta property="og:url" content="http://example.com/2022/11/22/%E4%BD%8D%E8%BF%90%E7%AE%97/index.html">
 <meta property="og:site_name" content="学习记录">
+<meta property="og:description" content="位运算技巧    运算 解释    (n &gt;&gt; k) &amp; 1 取出整数n在二进制表示下的第k位   n &amp; ((1 &lt;&lt; k) - 1) 取出整数n在二进制表示下的第0~k-1位(后k位)   n xor (1 &lt;&lt; k) 把整数n在二进制表示下的第k位取反   n\ (1 &lt;&lt; k)   n&amp;(~(1 &lt;&lt; k)">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-22T05:57:21.000Z">
+<meta property="article:modified_time" content="2022-11-22T06:11:09.539Z">
 <meta property="article:author" content="YXY">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/tags/%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86/">
+<link rel="canonical" href="http://example.com/2022/11/22/%E4%BD%8D%E8%BF%90%E7%AE%97/">
 
 
 <script id="page-configurations">
@@ -36,12 +40,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: 深度优先遍历 | 学习记录</title>
+  <title>位运算 | 学习记录</title>
   
 
 
@@ -178,51 +182,126 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">深度优先遍历
-          <small>标签</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/22/%E4%BD%8D%E8%BF%90%E7%AE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="YXY">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="学习记录">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          位运算
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-11-22 13:57:21 / 修改时间：14:11:09" itemprop="dateCreated datePublished" datetime="2022-11-22T13:57:21+08:00">2022-11-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode%E6%80%BB%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">LeetCode总结</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
+        <p>位运算技巧</p>
+<table>
+<thead>
+<tr>
+<th align="center">运算</th>
+<th align="center">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">(n &gt;&gt; k) &amp; 1</td>
+<td align="center">取出整数n在二进制表示下的第k位</td>
+</tr>
+<tr>
+<td align="center">n &amp; ((1 &lt;&lt; k) - 1)</td>
+<td align="center">取出整数n在二进制表示下的第0~k-1位(后k位)</td>
+</tr>
+<tr>
+<td align="center">n xor (1 &lt;&lt; k)</td>
+<td align="center">把整数n在二进制表示下的第k位取反</td>
+</tr>
+<tr>
+<td align="center">n\</td>
+<td align="center">(1 &lt;&lt; k)</td>
+</tr>
+<tr>
+<td align="center">n&amp;(~(1 &lt;&lt; k))</td>
+<td align="center">把整数n在二进制表示下的第k位赋值0</td>
+</tr>
+<tr>
+<td align="center">n &amp; (-n)</td>
+<td align="center">非负整数n在二进制表示下“最低位的1及其后边所有0构成的数值”</td>
+</tr>
+<tr>
+<td align="center">n &amp; (n - 1)</td>
+<td align="center">将整数n在二进制表示下的最低位1赋值0</td>
+</tr>
+<tr>
+<td align="center">n \</td>
+<td align="center">(n + 1)</td>
+</tr>
+</tbody></table>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-24T18:43:23+08:00"
-              content="2022-10-24">
-          10-24
-        </time>
-      </div>
+      <footer class="post-footer">
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/24/Hot100-236-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/" itemprop="url">
-            <span itemprop="name">Hot100-236-二叉树的最近公共祖先</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/26/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-862-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BAK%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/" rel="prev" title="每日一题-862-和至少为K的最短子数组">
+      <i class="fa fa-chevron-left"></i> 每日一题-862-和至少为K的最短子数组
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
