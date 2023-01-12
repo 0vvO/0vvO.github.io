@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>567-字符串的排列</title>
+    <url>/2022/10/28/567-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8E%92%E5%88%97/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>给你两个字符串<code>s1</code>和<code>s2</code>，写一个函数来判断<code>s2</code>是否包含<code>s1</code>的排列。如果是，返回<code>true</code>；否则，返回<code>false</code>。</p>
+<p>换句话说，<code>s1</code>的排列之一是<code>s2</code>的 <strong>子串</strong> 。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s1 = &quot;ab&quot; s2 = &quot;eidbaooo&quot;</span><br><span class="line">输出：true</span><br><span class="line">解释：s2 包含 s1 的排列之一 (&quot;ba&quot;).</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">题目所求的字串并非要求顺序严格一致，所以只需要统计字符出现的次数。</span><br><span class="line">即在s2中找一个和s1长度相同的序列，s1中每个字符出现的频数与s2一致。</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution1-利用数组实现-固定窗口大小"><a href="#Solution1-利用数组实现-固定窗口大小" class="headerlink" title="Solution1 利用数组实现 固定窗口大小"></a>Solution1 利用数组实现 固定窗口大小</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">checkInclusion</span><span class="params">(String s1, String s2)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(s1.length() &gt; s2.length())</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="type">int</span>[] arr1 = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="type">int</span>[] arr2 = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;s1.length(); i++)&#123;</span><br><span class="line">            arr1[s1.charAt(i) - <span class="string">&#x27;a&#x27;</span>]++;</span><br><span class="line">            arr2[s2.charAt(i) - <span class="string">&#x27;a&#x27;</span>]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(check(arr1, arr2))</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=s1.length(); i&lt;s2.length(); i++)&#123;</span><br><span class="line">            <span class="comment">// 每次向右移动一下</span></span><br><span class="line">            arr2[s2.charAt(i) - <span class="string">&#x27;a&#x27;</span>]++;</span><br><span class="line">            arr2[s2.charAt(i-s1.length()) - <span class="string">&#x27;a&#x27;</span>]--;</span><br><span class="line">            <span class="keyword">if</span>(check(arr1, arr2))</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">check</span><span class="params">(<span class="type">int</span>[] arr1, <span class="type">int</span>[] arr2)</span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;arr1.length; i++)</span><br><span class="line">            <span class="keyword">if</span>(arr1[i] != arr2[i])</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Soulution-利用哈希表-x2F-数组实现-固定窗口内的词频数一定满足条件"><a href="#Soulution-利用哈希表-x2F-数组实现-固定窗口内的词频数一定满足条件" class="headerlink" title="Soulution 利用哈希表&#x2F;数组实现 固定窗口内的词频数一定满足条件"></a>Soulution 利用哈希表&#x2F;数组实现 固定窗口内的词频数一定满足条件</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">checkInclusion</span><span class="params">(String s1, String s2)</span> &#123;</span><br><span class="line">        Map&lt;Character, Integer&gt; target = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        Map&lt;Character, Integer&gt; source = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="comment">// 记录词频数</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">char</span> ch : s1.toCharArray())</span><br><span class="line">            target.put(ch, target.getOrDefault(ch, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">        <span class="type">int</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">start</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;s2.length(); i++)&#123;</span><br><span class="line">            <span class="type">char</span> <span class="variable">ch</span> <span class="operator">=</span> s2.charAt(i);</span><br><span class="line">            source.put(ch, source.getOrDefault(ch, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">            <span class="comment">// 对于Integer对象不能直接使用 == 进行比较 </span></span><br><span class="line">            <span class="keyword">if</span>(source.get(ch).equals(target.get(ch)))&#123;</span><br><span class="line">                flag++;</span><br><span class="line">                <span class="keyword">if</span>(flag == target.size())&#123;</span><br><span class="line">                    <span class="type">char</span> <span class="variable">remove</span> <span class="operator">=</span> s2.charAt(start);</span><br><span class="line">                    <span class="comment">// 缩小左边界</span></span><br><span class="line">                    <span class="keyword">while</span>(flag == target.size())&#123;</span><br><span class="line">                        source.put(remove, source.get(remove)-<span class="number">1</span>);</span><br><span class="line">                        <span class="keyword">if</span>(target.containsKey(remove) &amp;&amp; target.get(remove) &gt; source.get(remove))&#123;</span><br><span class="line">                            <span class="keyword">if</span>(i-start+<span class="number">1</span> == s1.length())</span><br><span class="line">                                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                            flag--;</span><br><span class="line">                        &#125;</span><br><span class="line">                        remove = s2.charAt(++start);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>滑动窗口</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hot100-236-二叉树的最近公共祖先</title>
+    <url>/2022/10/24/Hot100-236-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%9C%80%E8%BF%91%E5%85%AC%E5%85%B1%E7%A5%96%E5%85%88/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。</p>
+<p>百度百科中最近公共祖先的定义为：“对于有根树<code>T</code>的两个节点<code>p</code>、<code>q</code>，最近公共祖先表示为一个节点 <code>x</code>，满足 <code>x</code> 是 <code>p</code>、<code>q</code> 的祖先且<code>x</code> 的深度尽可能大（一个节点也可以是它自己的祖先）。”</p>
+<h2 id="示例1"><a href="#示例1" class="headerlink" title="示例1:"></a>示例1:</h2><p><img src="https://assets.leetcode.com/uploads/2018/12/14/binarytree.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1</span><br><span class="line">输出：3</span><br><span class="line">解释：节点 5 和节点 1 的最近公共祖先是节点 3 。</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">两个节点p、q有两种分布情况:</span><br><span class="line">  1.在同一子树</span><br><span class="line">  2.在不同子树</span><br><span class="line">从根节点开始，向左右子树递归查询信息：</span><br><span class="line">递归终止条件：当前节点为空，当前节点为p或q，返回当前节点</span><br><span class="line">  1.递归遍历左右子树，如果左右子树查到节点都不为空，则表明 p 和 q 分别在左右子树中，因此，当前节点即为最近公共祖先；</span><br><span class="line">  2.如果左右子树其中一个不为空，则返回非空节点</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> TreeNode <span class="title function_">lowestCommonAncestor</span><span class="params">(TreeNode root, TreeNode p, TreeNode q)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>((root == p) || (root == q) || root == <span class="literal">null</span>)</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line">        <span class="type">TreeNode</span> <span class="variable">left</span> <span class="operator">=</span> lowestCommonAncestor(root.left, p, q);</span><br><span class="line">        <span class="type">TreeNode</span> <span class="variable">right</span> <span class="operator">=</span> lowestCommonAncestor(root.right, p, q);</span><br><span class="line">        <span class="keyword">if</span>(left == <span class="literal">null</span>)   <span class="keyword">return</span> right;</span><br><span class="line">        <span class="keyword">if</span>(right == <span class="literal">null</span>)   <span class="keyword">return</span> left;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Hot100</category>
+      </categories>
+      <tags>
+        <tag>二叉树</tag>
+        <tag>深度优先遍历</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hot100-34-在排序数组中查找元素的第一个和最后一个位置</title>
+    <url>/2022/10/19/Hot100-34-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>给你一个按照非递减顺序排列的整数数组<code>nums</code>，和一个目标值<code>target</code>。请你找出给定目标值在数组中的开始位置和结束位置。</p>
+<p>如果数组中不存在目标值<code>target</code>，返回<code>[-1, -1]</code>。</p>
+<p>你必须设计并实现时间复杂度为<code>O(log n)</code>的算法解决此问题。</p>
+<p>示例1:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [5,7,7,8,8,10], target = 8</span><br><span class="line">输出：[3,4]</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路:"></a>思路:</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">递增序列查找某一值，优先考虑二分查找.</span><br><span class="line">寻找leftidx等于寻找第一个大于等于target的下标.</span><br><span class="line">寻找rightidx等于寻找第一个大于target的下标-1.</span><br><span class="line">注意low、high的初始和变化细节！！！</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution:"></a>Solution:</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[] searchRange(<span class="type">int</span>[] nums, <span class="type">int</span> target) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;searchLeft(nums, target), searchRight(nums, target)&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">searchLeft</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">low</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">high</span> <span class="operator">=</span> nums.length-<span class="number">1</span>;</span><br><span class="line">        <span class="comment">// [low, high]</span></span><br><span class="line">        <span class="keyword">while</span>(low &lt;= high)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> low + (high - low)/<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[mid] &gt;= target)</span><br><span class="line">                high = mid - <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &lt; target)</span><br><span class="line">                low = mid + <span class="number">1</span>; </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(low &lt; nums.length &amp;&amp; nums[low] == target)</span><br><span class="line">            <span class="keyword">return</span> low;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">searchRight</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> target)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">low</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">high</span> <span class="operator">=</span> nums.length;</span><br><span class="line">        <span class="comment">// [low, high)</span></span><br><span class="line">        <span class="keyword">while</span>(low &lt; high)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> low + (high - low)/<span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span>(nums[mid] &lt;= target)</span><br><span class="line">                low = mid + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(nums[mid] &gt; target)</span><br><span class="line">                high = mid; </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 大于target的下标</span></span><br><span class="line">        <span class="keyword">if</span>(low &gt; <span class="number">0</span> &amp;&amp; nums[low-<span class="number">1</span>] == target)</span><br><span class="line">            <span class="keyword">return</span> low-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>Hot100</category>
+      </categories>
+      <tags>
+        <tag>二分</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>位运算</title>
+    <url>/2022/11/22/%E4%BD%8D%E8%BF%90%E7%AE%97/</url>
+    <content><![CDATA[<p>位运算技巧</p>
+<table>
+<thead>
+<tr>
+<th align="center">运算</th>
+<th align="center">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">(n &gt;&gt; k) &amp; 1</td>
+<td align="center">取出整数n在二进制表示下的第k位</td>
+</tr>
+<tr>
+<td align="center">n &amp; ((1 &lt;&lt; k) - 1)</td>
+<td align="center">取出整数n在二进制表示下的第0~k-1位(后k位)</td>
+</tr>
+<tr>
+<td align="center">n xor (1 &lt;&lt; k)</td>
+<td align="center">把整数n在二进制表示下的第k位取反</td>
+</tr>
+<tr>
+<td align="center">n|(1 &lt;&lt; k)</td>
+<td align="center">把整数n在二进制表示下的第k位赋值1</td>
+</tr>
+<tr>
+<td align="center">n&amp;(~(1 &lt;&lt; k))</td>
+<td align="center">把整数n在二进制表示下的第k位赋值0</td>
+</tr>
+<tr>
+<td align="center">n &amp; (-n)</td>
+<td align="center">非负整数n在二进制表示下“最低位的1及其后边所有0构成的数值”</td>
+</tr>
+<tr>
+<td align="center">n &amp; (n - 1)</td>
+<td align="center">将整数n在二进制表示下的最低位1赋值0</td>
+</tr>
+<tr>
+<td align="center">n | (n + 1)</td>
+<td align="center">将整数n在二进制表示下的最低位0赋值1</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>LeetCode总结</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Hot100-79-单词搜索</title>
+    <url>/2022/10/24/Hot100-79-%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>给定一个<code>m x n</code> 二维字符网格 <code>board</code> 和一个字符串单词 <code>word</code> 。如果 <code>word</code> 存在于网格中，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母<code>不允许被重复使用</code>。</p>
+<p>示例1:</p>
+<p><img src="https://assets.leetcode.com/uploads/2020/11/04/word2.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：board = [[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;E&quot;],[&quot;S&quot;,&quot;F&quot;,&quot;C&quot;,&quot;S&quot;],[&quot;A&quot;,&quot;D&quot;,&quot;E&quot;,&quot;E&quot;]], word = &quot;ABCCED&quot;</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">回溯剪枝</span><br><span class="line">用index记录前缀一样的长度，判断每次加入的字符是否和当前index对应的一样，若一样则index++，不一样则说明该方向不能满足</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">exist</span><span class="params">(<span class="type">char</span>[][] board, String word)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> board.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> board[<span class="number">0</span>].length;</span><br><span class="line">        <span class="type">int</span>[][] visted = <span class="keyword">new</span> <span class="title class_">int</span>[m][n];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;m; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>; j&lt;n; j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(board[i][j] == word.charAt(<span class="number">0</span>) &amp;&amp; backtrack(board, word, visted, <span class="number">0</span>, i, j))&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">backtrack</span><span class="params">(<span class="type">char</span>[][] board, String word, <span class="type">int</span>[][] visted, <span class="type">int</span> index, <span class="type">int</span> i, <span class="type">int</span> j)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(index == word.length())</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> board.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> board[<span class="number">0</span>].length;</span><br><span class="line">        <span class="type">char</span> <span class="variable">ch</span> <span class="operator">=</span> word.charAt(index);</span><br><span class="line">        <span class="keyword">if</span>(i &lt; <span class="number">0</span> || i == m || j &lt; <span class="number">0</span> || j == n || visted[i][j] == <span class="number">1</span> || ch != board[i][j])</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="type">boolean</span> <span class="variable">res</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line">            visted[i][j] = <span class="number">1</span>;</span><br><span class="line">            <span class="comment">// up</span></span><br><span class="line">            res = res || backtrack(board, word, visted, index+<span class="number">1</span>, i-<span class="number">1</span>, j);</span><br><span class="line">            <span class="comment">// down</span></span><br><span class="line">            res = res || backtrack(board, word, visted, index+<span class="number">1</span>, i+<span class="number">1</span>, j);</span><br><span class="line">            <span class="comment">// left</span></span><br><span class="line">            res = res || backtrack(board, word, visted, index+<span class="number">1</span>, i, j-<span class="number">1</span>);</span><br><span class="line">            <span class="comment">// right</span></span><br><span class="line">            res = res || backtrack(board, word, visted, index+<span class="number">1</span>, i, j+<span class="number">1</span>);</span><br><span class="line">            visted[i][j] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Hot100</category>
+      </categories>
+      <tags>
+        <tag>回溯</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>周赛-316-2-最大公因数等于K的子数组数目</title>
+    <url>/2022/10/23/%E5%91%A8%E8%B5%9B-316-2-%E6%9C%80%E5%A4%A7%E5%85%AC%E5%9B%A0%E6%95%B0%E7%AD%89%E4%BA%8EK%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E6%95%B0%E7%9B%AE/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>给你一个整数数组<code>nums</code>和一个整数<code>k</code>，请你统计并返回<code>nums</code>的子数组中元素的最大公因数等于<code>k</code>的子数组数目。</p>
+<p>子数组 是数组中一个连续的非空序列。</p>
+<p>数组的最大公因数 是能整除数组中所有元素的最大整数。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>输入：nums &#x3D; [9,3,1,2,6,3], k &#x3D; 3<br>输出：4<br>解释：nums 的子数组中，以 3 作为最大公因数的子数组如下：</p>
+<ul>
+<li>[<strong>9</strong>,<strong>3</strong>,1,2,6,3]</li>
+<li>[9,<strong>3</strong>,1,2,6,3]</li>
+<li>[9,3,1,2,<strong>6</strong>,<strong>3</strong>]</li>
+<li>[9,3,1,2,6,<strong>3</strong>]</li>
+</ul>
+<span id="more"></span>
+
+
+<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gcd求法：辗转相除</span><br><span class="line">暴力求解：</span><br><span class="line">    对于每一个num,判断从当前位置往后的gcd</span><br><span class="line">剪枝：</span><br><span class="line">    在每一轮内循环中, 若当前num%k != 0 则退出循环。</span><br><span class="line">    若当前gcd &lt; k, 也退出循环。</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution1"><a href="#Solution1" class="headerlink" title="Solution1"></a>Solution1</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">subarrayGCD</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> nums.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[i] % k != <span class="number">0</span>) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="type">int</span> <span class="variable">gcd</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j=i; j&lt;n; j++)&#123;</span><br><span class="line">                gcd = gcd(nums[j], gcd);</span><br><span class="line">                <span class="keyword">if</span>(gcd == k)</span><br><span class="line">                    res++;</span><br><span class="line">                <span class="keyword">if</span>(gcd &lt; k)</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">gcd</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(b == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> a;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> gcd(b, a%b);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>周赛</category>
+      </categories>
+      <tags>
+        <tag>最大公约数</tag>
+        <tag>剪枝</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>周赛-316-1-判断两个事件是否存在冲突</title>
+    <url>/2022/10/23/%E5%91%A8%E8%B5%9B-316-1-%E5%88%A4%E6%96%AD%E4%B8%A4%E4%B8%AA%E4%BA%8B%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E5%86%B2%E7%AA%81/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>给你两个字符串数组<code>event1</code>和<code>event2</code>，表示发生在同一天的两个闭区间时间段事件，其中：</p>
+<ul>
+<li><code>event1 = [startTime1, endTime1]</code> 且</li>
+<li><code>event2 = [startTime2, endTime2]</code></li>
+</ul>
+<p>事件的时间为有效的 24 小时制且按 HH:MM 格式给出。</p>
+<p>当两个事件存在某个非空的交集时（即，某些时刻是两个事件都包含的），则认为出现 冲突 。</p>
+<p>如果两个事件之间存在冲突，返回 true ；否则，返回 false </p>
+<h2 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：event1 = [&quot;01:15&quot;,&quot;02:00&quot;], event2 = [&quot;02:00&quot;,&quot;03:00&quot;]</span><br><span class="line">输出：true</span><br><span class="line">解释：两个事件在 2:00 出现交集。</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="思路1："><a href="#思路1：" class="headerlink" title="思路1："></a>思路1：</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">将字符串转换为分钟进行比较</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution1"><a href="#Solution1" class="headerlink" title="Solution1"></a>Solution1</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">haveConflict</span><span class="params">(String[] event1, String[] event2)</span> &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start1</span> <span class="operator">=</span> convert(event1[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">long</span> <span class="variable">end1</span> <span class="operator">=</span> convert(event1[<span class="number">1</span>]);</span><br><span class="line">        <span class="type">long</span> <span class="variable">start2</span> <span class="operator">=</span> convert(event2[<span class="number">0</span>]);</span><br><span class="line">        <span class="type">long</span> <span class="variable">end2</span> <span class="operator">=</span> convert(event2[<span class="number">1</span>]);</span><br><span class="line">        <span class="keyword">if</span>(start1 &gt; end2 || start2 &gt; end1)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">convert</span><span class="params">(String str)</span>&#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// hh</span></span><br><span class="line">        res = res + ((str.charAt(<span class="number">0</span>) - <span class="string">&#x27;0&#x27;</span>)*<span class="number">10</span> + (str.charAt(<span class="number">1</span>) - <span class="string">&#x27;0&#x27;</span>)) * <span class="number">60</span>;</span><br><span class="line">        <span class="comment">// mm</span></span><br><span class="line">        res = res + ((str.charAt(<span class="number">3</span>) - <span class="string">&#x27;0&#x27;</span>)*<span class="number">10</span> + (str.charAt(<span class="number">4</span>) - <span class="string">&#x27;0&#x27;</span>));</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="思路2"><a href="#思路2" class="headerlink" title="思路2"></a>思路2</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">借用Java String类的compareTo方法进行比较（按字典序）：str.compareTo(str1)</span><br><span class="line">1. 当 str == str1 -&gt; 0</span><br><span class="line">2. 当 str  &gt; str1 -&gt; 正整数</span><br><span class="line">3. 当 str  &lt; str1 -&gt; 负整数</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">haveConflict</span><span class="params">(String[] event1, String[] event2)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> event1[<span class="number">0</span>].compareTo(event2[<span class="number">1</span>]) &lt;= <span class="number">0</span> || event2[<span class="number">0</span>].compareTo(event1[<span class="number">1</span>]) &lt;= <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>周赛</category>
+      </categories>
+      <tags>
+        <tag>模拟</tag>
+        <tag>区间</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>周赛-316-3-使数组相等的最小开销</title>
+    <url>/2022/10/23/%E5%91%A8%E8%B5%9B-316-3-%E4%BD%BF%E6%95%B0%E7%BB%84%E7%9B%B8%E7%AD%89%E7%9A%84%E6%9C%80%E5%B0%8F%E5%BC%80%E9%94%80/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>给你两个下标从<code>0</code>开始的数组<code>nums</code>和<code>cost</code>，分别包含<code>n</code>个 正 整数。</p>
+<p>你可以执行下面操作 <strong>任意</strong> 次：</p>
+<ul>
+<li>将<code>nums</code>中 任意元素增加或者减小<code>1</code>。<br>对第 i 个元素执行一次操作的开销是 cost[i] 。</li>
+</ul>
+<p>请你返回使<code>nums</code>中所有元素<strong>相等</strong>的<strong>最少</strong>总开销。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [1,3,5,2], cost = [2,3,1,14]</span><br><span class="line">输出：8</span><br><span class="line">解释：我们可以执行以下操作使所有元素变为 2 ：</span><br><span class="line">- 增加第 0 个元素 1 次，开销为 2 。</span><br><span class="line">- 减小第 1 个元素 1 次，开销为 3 。</span><br><span class="line">- 减小第 2 个元素 3 次，开销为 1 + 1 + 1 = 3 。</span><br><span class="line">总开销为 2 + 3 + 3 = 8 。</span><br><span class="line">这是最小开销。</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">类似于 &quot;最小操作次数使数组元素相等 II&quot;</span><br><span class="line"></span><br><span class="line">中位数贪心</span><br><span class="line">将cost[i] 视为 nums[i]出现的次数</span><br><span class="line">比如nums = [1,3], cost = [2, 3], 可以看成[1,1,3,3,3]的序列</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">minCost</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span>[] cost)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> nums.length;</span><br><span class="line">        <span class="type">int</span>[][] record = <span class="keyword">new</span> <span class="title class_">int</span>[n][];</span><br><span class="line">        <span class="comment">// 总出现次数可能大于Integer.MAX_VALUE</span></span><br><span class="line">        <span class="type">long</span> <span class="variable">totalCost</span> <span class="operator">=</span> <span class="number">0L</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            record[i] = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;nums[i], cost[i]&#125;;</span><br><span class="line">            totalCost += cost[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 依照数小，代价小的原则排序</span></span><br><span class="line">        Arrays.sort(record, (a,b) -&gt; (a[<span class="number">0</span>] == b[<span class="number">0</span>] ? a[<span class="number">1</span>] - b[<span class="number">1</span>] : a[<span class="number">0</span>] - b[<span class="number">0</span>]));</span><br><span class="line">        <span class="type">long</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0L</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">chosen</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;n; i++)&#123;</span><br><span class="line">            sum += record[i][<span class="number">1</span>];</span><br><span class="line">            <span class="comment">// 判断是否到达中位</span></span><br><span class="line">            <span class="keyword">if</span>((sum&lt;&lt;<span class="number">1</span>) &gt;= totalCost)&#123;</span><br><span class="line">                chosen = record[i][<span class="number">0</span>];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">long</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0L</span>;</span><br><span class="line">        <span class="comment">// 中位数</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span>[] pair : record)&#123;</span><br><span class="line">            res += (<span class="type">long</span>)Math.abs(pair[<span class="number">0</span>] - chosen) * (<span class="type">long</span>)pair[<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>周赛</category>
+      </categories>
+      <tags>
+        <tag>贪心</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>每日一题 1700 无法吃午餐的学生数量</title>
+    <url>/2022/10/19/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-1700-%E6%97%A0%E6%B3%95%E5%90%83%E5%8D%88%E9%A4%90%E7%9A%84%E5%AD%A6%E7%94%9F%E6%95%B0%E9%87%8F/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>学校的自助午餐提供圆形和方形的三明治，分别用数字 <strong>0</strong> 和 <strong>1</strong> 表示。所有学生站在一个队列里，每个学生要么喜欢圆形的要么喜欢方形的。餐厅里三明治的数量与学生的数量相同。所有三明治都放在一个栈里，每一轮：</p>
+<ul>
+<li>如果队列最前面的学生 喜欢栈顶的三明治，那么会拿走它并离开队列。</li>
+<li>否则，这名学生会放弃这个三明治并回到队列的尾部。</li>
+</ul>
+<p>这个过程会一直持续到队列里所有学生都不喜欢栈顶的三明治为止。</p>
+<p>给你两个整数数组 <code>students</code> 和 <code>sandwiches</code> ，其中sandwiches[i] 是栈里面第 i​​​​​​ 个三明治的类型（i &#x3D; 0 是栈的顶部）， students[j] 是初始队列里第 j​​​​​​ 名学生对三明治的喜好（j &#x3D; 0 是队列的最开始位置）。请你返回无法吃午餐的学生数量。</p>
+<p>示例1:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：students = [1,1,1,0,0,1], sandwiches = [1,0,0,0,1,1]</span><br><span class="line">输出：3</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+
+<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">根据题意，直接使用队列</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution1"><a href="#Solution1" class="headerlink" title="Solution1"></a>Solution1</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">countStudents</span><span class="params">(<span class="type">int</span>[] students, <span class="type">int</span>[] sandwiches)</span> &#123;</span><br><span class="line">        Queue&lt;Integer&gt; queue = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> stu : students)</span><br><span class="line">            queue.offer(stu);</span><br><span class="line">        <span class="comment">// 当前sandwiches位置</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(!queue.isEmpty())&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> queue.size();</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;size; i++)&#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">cur</span> <span class="operator">=</span> queue.poll();</span><br><span class="line">                <span class="keyword">if</span>(cur == sandwiches[index])&#123;</span><br><span class="line">                    index++;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span></span><br><span class="line">                    queue.offer(cur);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(queue.size() == size)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sandwiches.length - index;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="思路2"><a href="#思路2" class="headerlink" title="思路2"></a>思路2</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">模拟</span><br><span class="line">分别统计喜欢0和1的人数count0、count1</span><br><span class="line">遍历sandwiches：</span><br><span class="line">    如果当前sandwiches==0 &amp;&amp; count0 &gt; 0, 则count0--</span><br><span class="line">    如果当前sandwiches==1 &amp;&amp; count1 &gt; 0, 则count1--</span><br><span class="line">    如果不满足上述条件则说明所有学生都不喜欢栈顶的三明治为止</span><br></pre></td></tr></table></figure>
+<h2 id="Solution2"><a href="#Solution2" class="headerlink" title="Solution2"></a>Solution2</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">countStudents</span><span class="params">(<span class="type">int</span>[] students, <span class="type">int</span>[] sandwiches)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] cnt = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">2</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> stu : students)</span><br><span class="line">            cnt[stu]++;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> sand : sandwiches)&#123;</span><br><span class="line">            <span class="keyword">if</span>(sand == <span class="number">0</span> &amp;&amp; cnt[<span class="number">0</span>] &gt; <span class="number">0</span>)</span><br><span class="line">                cnt[<span class="number">0</span>]--;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(sand == <span class="number">1</span> &amp;&amp; cnt[<span class="number">1</span>] &gt; <span class="number">0</span>)</span><br><span class="line">                cnt[<span class="number">1</span>]--;</span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">                <span class="keyword">return</span> cnt[<span class="number">0</span>] + cnt[<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>每日一题</category>
+      </categories>
+      <tags>
+        <tag>模拟</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>周赛-316-4-使数组相似的最少操作次数</title>
+    <url>/2022/10/23/%E5%91%A8%E8%B5%9B-316-4-%E4%BD%BF%E6%95%B0%E7%BB%84%E7%9B%B8%E4%BC%BC%E7%9A%84%E6%9C%80%E5%B0%91%E6%93%8D%E4%BD%9C%E6%AC%A1%E6%95%B0/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>给你两个正整数数组<code>nums</code>和<code>target</code>，两个数组长度相等。</p>
+<p>在一次操作中，你可以选择两个 不同的下标<code>i</code>和<code>j</code>，其中<code>0 &lt;= i, j &lt; nums.length</code>，并且：</p>
+<ul>
+<li>令 nums[i] &#x3D; nums[i] + 2 且</li>
+<li>令 nums[j] &#x3D; nums[j] - 2 。</li>
+</ul>
+<p>如果两个数组中每个元素出现的频率相等，我们称两个数组是 相似 的。</p>
+<p>请你返回将<code>nums</code>变得与<code>target</code>相似的最少操作次数。测试数据保证<code>nums</code>一定能变得与<code>target</code>相似。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [8,12,6], target = [2,14,10]</span><br><span class="line">输出：2</span><br><span class="line">解释：可以用两步操作将 nums 变得与 target 相似：</span><br><span class="line">- 选择 i = 0 和 j = 2 ，nums = [10,12,4] 。</span><br><span class="line">- 选择 i = 1 和 j = 2 ，nums = [10,14,2] 。</span><br><span class="line">2 次操作是最少需要的操作次数。</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">根据题意&quot;±2&quot;,我们可以得知相互对应的两个数的奇偶性一致。</span><br><span class="line">而要通过最小的次数使两个数组相等，就要将最小的一对，次小的一对，第三小的一对……</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">makeSimilar</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span>[] target)</span> &#123;</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        Arrays.sort(target);</span><br><span class="line">        <span class="comment">//初始奇偶位置都为0</span></span><br><span class="line">        <span class="type">int</span>[] pos = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">0</span>, <span class="number">0</span>&#125;;</span><br><span class="line">        <span class="type">long</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;nums.length; i++)&#123;</span><br><span class="line">            <span class="comment">// 判断当前数的奇偶</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">p</span> <span class="operator">=</span> nums[i] % <span class="number">2</span>;</span><br><span class="line">            <span class="comment">// 对应数的奇偶性是否和当前数一样</span></span><br><span class="line">            <span class="keyword">while</span>(target[pos[p]] %<span class="number">2</span> != p)&#123;</span><br><span class="line">                pos[p]++;</span><br><span class="line">            &#125;</span><br><span class="line">            res += Math.abs(nums[i] - target[pos[p]++]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res/<span class="number">4</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>周赛</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>每日一题-779-第K个语法符号</title>
+    <url>/2022/10/20/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-779-%E7%AC%ACK%E4%B8%AA%E8%AF%AD%E6%B3%95%E7%AC%A6%E5%8F%B7/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>我们构建了一个包含<code>n</code>行(<strong>索引从1开始</strong>)的表。首先在第一行我们写上一个<code>0</code>。接下来的每一行，将前一行中的<code>0</code>替换为<code>01</code>，<code>1</code>替换为<code>10</code>。</p>
+<ul>
+<li>例如，对于 n &#x3D; 3 ，第 1 行是 0 ，第 2 行是 01 ，第3行是 0110 。</li>
+</ul>
+<p>给定行数<code>n</code>和序数<code>k</code>，返回第<code>n</code>行中第<code>k</code>个字符。（**<code>k</code>从索引1开始**）</p>
+<p>示例1:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: n = 2, k = 1</span><br><span class="line">输出: 0</span><br><span class="line">解释: </span><br><span class="line">第一行: 0 </span><br><span class="line">第二行: 01</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">根据题意，我们可以得知当前所求结果与</span><br><span class="line">    前一行的对应位置的值prev有关，该值的下标为（k+1）/2,</span><br><span class="line">    同时还和自身所在位置pos的奇偶有关。</span><br><span class="line"></span><br><span class="line">    prev = 0</span><br><span class="line">        pos奇 -&gt; 0</span><br><span class="line">        pos偶 -&gt; 1</span><br><span class="line">    prev = 1</span><br><span class="line">        pos奇 -&gt; 1</span><br><span class="line">        pos偶 -&gt; 0</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">kthGrammar</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(k == <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 前一行对应位置</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">prev</span> <span class="operator">=</span> kthGrammar(n-<span class="number">1</span>, (k+<span class="number">1</span>)/<span class="number">2</span>);</span><br><span class="line">        <span class="comment">// 当前位置的奇偶性</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">pos</span> <span class="operator">=</span> k&amp;<span class="number">1</span>;</span><br><span class="line">        <span class="comment">//下面可用 pos^1^prev替代</span></span><br><span class="line">        <span class="keyword">if</span>(prev == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(pos == <span class="number">1</span>)</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(pos == <span class="number">1</span>)</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="思路2"><a href="#思路2" class="headerlink" title="思路2"></a>思路2</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">观察可得，后半部分可由前半部分“翻转得到”， 而前半部分又与前一行相同</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution2"><a href="#Solution2" class="headerlink" title="Solution2"></a>Solution2</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">kthGrammar</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(k == <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 判断为前半还是后半部分</span></span><br><span class="line">        <span class="keyword">if</span>(k &gt; (<span class="number">1</span> &lt;&lt; (n-<span class="number">2</span>)))&#123;</span><br><span class="line">            <span class="comment">// 前半部分对应的值</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">prev</span> <span class="operator">=</span> kthGrammar(n-<span class="number">1</span>, k-(<span class="number">1</span> &lt;&lt; (n-<span class="number">2</span>)));</span><br><span class="line">            <span class="comment">// 翻转</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>^prev;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> kthGrammar(n-<span class="number">1</span>, k);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>每日一题</category>
+      </categories>
+      <tags>
+        <tag>递归</tag>
+        <tag>找规律</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>每日一题-862-和至少为K的最短子数组</title>
+    <url>/2022/10/26/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-862-%E5%92%8C%E8%87%B3%E5%B0%91%E4%B8%BAK%E7%9A%84%E6%9C%80%E7%9F%AD%E5%AD%90%E6%95%B0%E7%BB%84/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>给你一个整数数组<code>nums</code>和一个整数<code>k</code>，找出<code>nums</code>中和至少为<code>k</code>的<strong>最短非空子数组</strong> ，并返回该子数组的长度。如果不存在这样的<strong>子数组</strong> ，返回<code>-1</code>。</p>
+<p><strong>子数组</strong>是数组中<strong>连续</strong>的一部分。<br>示例1:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：nums = [2,-1,2], k = 3</span><br><span class="line">输出：3</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">利用前缀和我们可以将子数组的和转换为两个前缀和之差s[right] - s[left]</span><br><span class="line">方法一：</span><br><span class="line">    暴力枚举</span><br><span class="line">方法二：</span><br><span class="line">    使用单调队列Deque维护我们已经遍历过的前缀和，设当前位置的前缀和为curS，对于每一curS我们做如下判断</span><br><span class="line">      - 如果curS减去队列头对应的前缀和的结果大于等于K，则移除队列头元素.</span><br><span class="line">      （即使后面的前缀和与队列头的前缀和之差满足条件，其长度也比当前长）</span><br><span class="line">      - 如果curS比队列尾对应的前缀和小，则移除当前队尾元素</span><br><span class="line">      （如果后面的前缀和减队尾元素的前缀和满足要求，那么减curS也能满足要求，同时长度也更短）</span><br></pre></td></tr></table></figure>
+<p><img src="https://pic.leetcode.cn/1666668814-ikkWBN-862-1-2.png"> <img src="https://pic.leetcode.cn/1666669250-KypIVI-862-2-3.png"></p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">shortestSubarray</span><span class="params">(<span class="type">int</span>[] nums, <span class="type">int</span> k)</span> &#123;</span><br><span class="line">        Deque&lt;Integer&gt; queue = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">        <span class="type">long</span>[] sums = <span class="keyword">new</span> <span class="title class_">long</span>[nums.length+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;nums.length+<span class="number">1</span>; i++)</span><br><span class="line">            sums[i] = sums[i-<span class="number">1</span>] + nums[i-<span class="number">1</span>];</span><br><span class="line">        <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> nums.length+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;nums.length+<span class="number">1</span>; i++)&#123;</span><br><span class="line">            <span class="keyword">while</span>(!queue.isEmpty() &amp;&amp; sums[i] - sums[queue.peekFirst()] &gt;= k)</span><br><span class="line">                res = Math.min(res, i-queue.pollFirst());</span><br><span class="line">            <span class="keyword">while</span>(!queue.isEmpty() &amp;&amp; sums[i] &lt;= sums[queue.peekLast()])</span><br><span class="line">                queue.pollLast();</span><br><span class="line">            queue.offerLast(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res == nums.length+<span class="number">1</span> ? -<span class="number">1</span> : res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>每日一题</category>
+      </categories>
+      <tags>
+        <tag>前缀和</tag>
+        <tag>单调队列</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>每日一题-878-第N个神奇数字</title>
+    <url>/2022/11/22/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-878-%E7%AC%ACN%E4%B8%AA%E7%A5%9E%E5%A5%87%E6%95%B0%E5%AD%97/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>一个正整数如果能被<code>a</code>或<code>b</code>整除，那么它是神奇的。</p>
+<p>给定三个整数<code>n</code>,<code>a</code>,<code>b</code>，返回第<code>n</code>个神奇的数字。因为答案可能很大，所以返回答案 对$10^9$ + 7取模后的值。</p>
+<p>示例1:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 4, a = 2, b = 3</span><br><span class="line">输出：6</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">由于n可能很大,所以直接从 1 到 n*min(a, b) 统计神奇数字的个数会有超时的可能。</span><br><span class="line">为了避免超时，我们可以采用二分的方法统计小于mid的神奇数字有多少个。</span><br><span class="line">对于 a 来说， 小于mid的神奇数字最多有mid / a, </span><br><span class="line">对于 b 来说， 最多有 mid/b个， </span><br><span class="line">同时能够整除a和b的神奇数共有 mid/c， c为a，b的最小公倍数。 </span><br><span class="line">cnt = mid/a + mid/b -mid/c。</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">MOD</span> <span class="operator">=</span> (<span class="type">int</span>) <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">nthMagicalNumber</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(a &gt; b) <span class="keyword">return</span> nthMagicalNumber(n, b ,a);</span><br><span class="line">        <span class="keyword">if</span>(b % a == <span class="number">0</span>) <span class="keyword">return</span> (<span class="type">int</span>)((<span class="type">long</span>) a * n % MOD);</span><br><span class="line">        <span class="type">long</span> <span class="variable">r</span> <span class="operator">=</span> (<span class="type">long</span>)a * n;</span><br><span class="line">        <span class="type">long</span> <span class="variable">l</span> <span class="operator">=</span> a;</span><br><span class="line">        <span class="type">long</span> <span class="variable">lcm</span> <span class="operator">=</span> lcm(a, b);</span><br><span class="line">        <span class="keyword">while</span>(l &lt;= r)&#123;</span><br><span class="line">            <span class="type">long</span> <span class="variable">mid</span> <span class="operator">=</span> l + (r - l)/<span class="number">2</span>;</span><br><span class="line">            <span class="type">long</span> <span class="variable">cnt</span> <span class="operator">=</span> mid/a + mid/b - mid/lcm;</span><br><span class="line">            <span class="keyword">if</span>(cnt &gt;= n) r = mid - <span class="number">1</span>;      <span class="comment">// 缩小右界直到cnt刚好小于n</span></span><br><span class="line">            <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (<span class="type">int</span>)(l % MOD);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 最小公倍数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">lcm</span><span class="params">(<span class="type">long</span> a, <span class="type">long</span> b)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (a * b) / gcd(a, b);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 最大公因数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">long</span> <span class="title function_">gcd</span><span class="params">(<span class="type">long</span> a, <span class="type">long</span> b)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> b == <span class="number">0</span> ? a : gcd(b, a % b); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>每日一题</category>
+      </categories>
+      <tags>
+        <tag>二分</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>每日一题-901-股票价格跨度</title>
+    <url>/2022/10/21/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-901-%E8%82%A1%E7%A5%A8%E4%BB%B7%E6%A0%BC%E8%B7%A8%E5%BA%A6/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目:"></a>题目:</h2><p>编写一个<code>StockSpanner</code>类，它收集某些股票的每日报价，并返回该股票当日价格的跨度。</p>
+<p>今天股票价格的跨度被定义为股票价格小于或等于今天价格的最大连续日数（从今天开始往回数，包括今天）。</p>
+<p>例如，如果未来7天股票的价格是<code>[100, 80, 60, 70, 60, 75, 85]</code>，那么股票跨度将是<code>[1, 1, 1, 2, 1, 4, 6]</code>。</p>
+<p>示例1:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：[&quot;StockSpanner&quot;,&quot;next&quot;,&quot;next&quot;,&quot;next&quot;,&quot;next&quot;,&quot;next&quot;,&quot;next&quot;,&quot;next&quot;], [[],[100],[80],[60],[70],[60],[75],[85]]</span><br><span class="line">输出：[null,1,1,1,2,1,4,6]</span><br><span class="line">解释：</span><br><span class="line">首先，初始化 S = StockSpanner()，然后：</span><br><span class="line">S.next(100) 被调用并返回 1，</span><br><span class="line">S.next(80) 被调用并返回 1，</span><br><span class="line">S.next(60) 被调用并返回 1，</span><br><span class="line">S.next(70) 被调用并返回 2，</span><br><span class="line">S.next(60) 被调用并返回 1，</span><br><span class="line">S.next(75) 被调用并返回 4，</span><br><span class="line">S.next(85) 被调用并返回 6。</span><br><span class="line"></span><br><span class="line">注意 (例如) S.next(75) 返回 4，因为截至今天的最后 4 个价格</span><br><span class="line">(包括今天的价格 75) 小于或等于今天的价格。</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+
+<h2 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">记忆化搜索:记忆化每一个price的结果dp[]</span><br><span class="line">    对于每一个新加入的price： cnt = 1;</span><br><span class="line">        首先判断前一个price是否小于当前price，如果小于则cnt = cnt+dp[i]</span><br><span class="line">        然后接着判断下标为i-cnt知道price大于当前price</span><br></pre></td></tr></table></figure>
+
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">StockSpanner</span> &#123;</span><br><span class="line">    <span class="type">int</span>[] stocks;</span><br><span class="line">    <span class="type">int</span>[] dp;</span><br><span class="line">    <span class="type">int</span> cur;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">StockSpanner</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//next 最多调用10000次</span></span><br><span class="line">        <span class="built_in">this</span>.stocks = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">10000</span>];</span><br><span class="line">        <span class="built_in">this</span>.dp = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">10000</span>];</span><br><span class="line">        Arrays.fill(dp, <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">this</span>.cur = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">next</span><span class="params">(<span class="type">int</span> price)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.stocks[cur] = price;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cnt</span> <span class="operator">=</span> dp[cur];</span><br><span class="line">        <span class="keyword">while</span>(cur-cnt &gt;= <span class="number">0</span> &amp;&amp; stocks[cur-cnt] &lt;= price)&#123;</span><br><span class="line">            cnt = cnt + dp[cur-cnt];</span><br><span class="line">        &#125;</span><br><span class="line">        dp[cur] = cnt;</span><br><span class="line">        cur++;</span><br><span class="line">        <span class="keyword">return</span> dp[cur-<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="思路2"><a href="#思路2" class="headerlink" title="思路2"></a>思路2</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">类似题目：496 下一个更大元素</span><br><span class="line">单调栈:</span><br><span class="line">    按照未来比较的顺序入栈，如果入栈元素(入栈元素最好为下标)的值比栈顶值大则一直pop()直到栈顶值比当前元素小或者栈为空。</span><br><span class="line">    栈底(大)--&gt;栈顶(小)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">StockSpanner</span> &#123;</span><br><span class="line">    Stack&lt;<span class="type">int</span>[]&gt; stack;</span><br><span class="line">    <span class="type">int</span> cur;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">StockSpanner</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.stack = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">        <span class="built_in">this</span>.cur = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">next</span><span class="params">(<span class="type">int</span> price)</span> &#123;</span><br><span class="line">        <span class="keyword">while</span>(!stack.isEmpty() &amp;&amp; price &gt;= stack.peek()[<span class="number">1</span>])</span><br><span class="line">            stack.pop();</span><br><span class="line">        <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> stack.isEmpty() ? cur + <span class="number">1</span> : cur - stack.peek()[<span class="number">0</span>];</span><br><span class="line">        stack.push(<span class="keyword">new</span> <span class="title class_">int</span>[]&#123;cur++, price&#125;);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>每日一题</category>
+      </categories>
+      <tags>
+        <tag>单调栈</tag>
+        <tag>记忆化搜索</tag>
+      </tags>
+  </entry>
+</search>
